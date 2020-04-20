@@ -45,11 +45,13 @@ print("##################################################################\n" +
         "# Download all the content from your courses at UC3M Aula Global #\n" +
         "##################################################################\n")
 
+
 if args.user is not None:
     user=args.user
 else:
     user = input("Enter NIA: ")
 passwd = getpass.getpass(prompt="Enter password: ")
+
 
 # Submit login form
 print("Login in...")
@@ -78,7 +80,7 @@ for link in soup.findAll("a"):
 
 not_downloaded=[]
 # Check every course page
-for course in courses:
+for course in sorted(courses):
     url = br.open(course)
     soup = bs(url, "html.parser")
     h1 = soup.find("h1").text
@@ -115,6 +117,8 @@ for course in courses:
                 fh = open(file, 'wb')
                 fh.write(response.read())
                 fh.close()
+                response.close()
+                br.clear_history()
 
 if len(not_downloaded)>0:
     for element in not_downloaded:
